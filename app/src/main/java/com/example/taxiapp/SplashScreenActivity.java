@@ -18,7 +18,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                startActivity(new Intent(SplashScreenActivity.this, SignInActivity.class));
+                startActivity(new Intent(SplashScreenActivity.this, ChooseModeActivity.class));
             }
         });
         thread.start();

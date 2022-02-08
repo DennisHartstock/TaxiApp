@@ -26,7 +26,6 @@
             android:textStyle="bold"
             android:textSize="50sp"/>
 
-
     </LinearLayout>
 
 </FrameLayout>

@@ -10,7 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaxiApp">
         <activity
-            android:name=".SignInActivity"
+            android:name=".DriverSignInActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PassengerSignInActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChooseModeActivity"
             android:exported="false" />
         <activity
             android:name=".SplashScreenActivity"
