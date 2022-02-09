@@ -8,6 +8,18 @@
     android:padding="16dp"
     tools:context=".DriverSignInActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="50dp"
+        android:gravity="center_horizontal"
+        android:text="driver sign in"
+        android:textAllCaps="true"
+        android:background="@android:color/holo_orange_light"
+        android:textColor="@color/purple_500"
+        android:textSize="30sp" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputEmail"
         android:layout_width="match_parent"
@@ -69,23 +81,25 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/SignUpButton"
+        android:id="@+id/signUpButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:backgroundTint="@android:color/holo_orange_light"
+        android:onClick="signUp"
         android:text="sign up"
         android:textColor="@color/purple_500"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/toggleSignUpLogInTextView"
+        android:id="@+id/toggleSignUpLoginTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:clickable="true"
         android:gravity="center_horizontal"
-        android:text="Tap to Log In"
+        android:onClick="toggleSignUpLogin"
+        android:text="Tap to Login"
         android:textColor="@color/purple_500"
         android:textSize="20sp" />
 
