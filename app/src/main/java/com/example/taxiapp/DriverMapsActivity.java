@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.taxiapp.databinding.ActivityDriverMapsBinding;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -209,7 +211,8 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
 
             String driverId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
             DatabaseReference drivers = FirebaseDatabase.getInstance().getReference().child("drivers");
-
+            GeoFire geoFire = new GeoFire(drivers);
+            geoFire.setLocation(driverId, new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()));
         }
     }
 
