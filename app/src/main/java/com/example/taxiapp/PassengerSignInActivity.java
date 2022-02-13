@@ -20,10 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class PassengerSignInActivity extends AppCompatActivity {
     public static final String TAG = "Passenger";
 
-    private TextInputLayout textInputEmail;
-    private TextInputLayout textInputName;
-    private TextInputLayout textInputPassword;
-    private TextInputLayout textInputConfirmPassword;
+    private TextInputLayout textInputEmail, textInputName, textInputPassword, textInputConfirmPassword;
     private Button signUpButton;
     private TextView toggleSignUpLoginTextView;
     private boolean isLoginModeActive;

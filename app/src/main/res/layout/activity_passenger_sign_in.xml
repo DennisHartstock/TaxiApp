@@ -86,7 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="@color/purple_500"
+        android:backgroundTint="@color/purple_500"
         android:onClick="signUp"
         android:text="sign up"
         android:textColor="@android:color/holo_orange_light"

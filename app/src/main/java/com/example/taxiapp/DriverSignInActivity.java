@@ -21,10 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class DriverSignInActivity extends AppCompatActivity {
     public static final String TAG = "Driver";
 
-    private TextInputLayout textInputEmail;
-    private TextInputLayout textInputName;
-    private TextInputLayout textInputPassword;
-    private TextInputLayout textInputConfirmPassword;
+    private TextInputLayout textInputEmail, textInputName, textInputPassword, textInputConfirmPassword;
     private Button signUpButton;
     private TextView toggleSignUpLoginTextView;
     private boolean isLoginModeActive;

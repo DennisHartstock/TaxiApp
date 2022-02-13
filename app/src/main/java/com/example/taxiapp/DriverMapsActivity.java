@@ -27,6 +27,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,14 +49,21 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.BuildConfig;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
 public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
     private GoogleMap mMap;
     private ActivityDriverMapsBinding binding;
+
+    FirebaseAuth auth;
+    FirebaseUser currentUser;
+
+    Button settingsButton, signOutButton;
 
     private static final int CHECK_SETTINGS_CODE = 111;
     private static final int REQUEST_LOCATION_PERMISSION = 222;
@@ -76,6 +84,17 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
         binding = ActivityDriverMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
+
+        settingsButton = findViewById(R.id.settingsButton);
+        signOutButton = findViewById(R.id.signOutButton);
+
+        signOutButton.setOnClickListener(view -> {
+            auth.signOut();
+            signOutDriver();
+        });
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -91,15 +110,18 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
         startLocationUpdates();
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+    private void signOutDriver() {
+        String driverId = currentUser.getUid();
+        DatabaseReference drivers = FirebaseDatabase.getInstance().getReference().child("drivers");
+        GeoFire geoFire = new GeoFire(drivers);
+        geoFire.removeLocation(driverId);
+
+        Intent intent = new Intent(DriverMapsActivity.this, ChooseModeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -209,7 +231,7 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
             mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
             mMap.addMarker(new MarkerOptions().position(driverLocation).title("Driver Location"));
 
-            String driverId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+            String driverId = currentUser.getUid();
             DatabaseReference drivers = FirebaseDatabase.getInstance().getReference().child("drivers");
             GeoFire geoFire = new GeoFire(drivers);
             geoFire.setLocation(driverId, new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()));
