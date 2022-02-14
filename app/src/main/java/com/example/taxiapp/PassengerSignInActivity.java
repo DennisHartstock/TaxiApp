@@ -1,8 +1,6 @@
 package com.example.taxiapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,12 +8,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class PassengerSignInActivity extends AppCompatActivity {
     public static final String TAG = "Passenger";
@@ -26,11 +24,19 @@ public class PassengerSignInActivity extends AppCompatActivity {
     private boolean isLoginModeActive;
 
     private FirebaseAuth mAuth;
+    FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_passenger_sign_in);
+
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance("https://taxi-app-d2353-default-rtdb.europe-west1.firebasedatabase.app/");
+
+        if (mAuth.getCurrentUser() != null) {
+            startActivity(new Intent(PassengerSignInActivity.this, PassengerMapsActivity.class));
+        }
 
         textInputEmail = findViewById(R.id.textInputEmail);
         textInputName = findViewById(R.id.textInputName);
@@ -38,8 +44,6 @@ public class PassengerSignInActivity extends AppCompatActivity {
         textInputConfirmPassword = findViewById(R.id.textInputConfirmPassword);
         signUpButton = findViewById(R.id.signUpButton);
         toggleSignUpLoginTextView = findViewById(R.id.toggleSignUpLoginTextView);
-
-        mAuth = FirebaseAuth.getInstance();
     }
 
     private boolean validateEmail() {
@@ -107,41 +111,37 @@ public class PassengerSignInActivity extends AppCompatActivity {
         if (isLoginModeActive) {
             mAuth.signInWithEmailAndPassword(textInputEmail.getEditText().getText().toString().trim(),
                     textInputPassword.getEditText().getText().toString().trim())
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "signInWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                //updateUI(user);
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(PassengerSignInActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_LONG).show();
-                                //updateUI(null);
-                            }
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            startActivity(new Intent(PassengerSignInActivity.this, PassengerMapsActivity.class));
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(PassengerSignInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_LONG).show();
+                            //updateUI(null);
                         }
                     });
         } else {
             mAuth.createUserWithEmailAndPassword(textInputEmail.getEditText().getText().toString().trim(),
                     textInputPassword.getEditText().getText().toString().trim())
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "createUserWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                //updateUI(user);
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(PassengerSignInActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_LONG).show();
-                                //updateUI(null);
-                            }
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            startActivity(new Intent(PassengerSignInActivity.this, PassengerMapsActivity.class));
+                            //updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(PassengerSignInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_LONG).show();
+                            //updateUI(null);
                         }
                     });
         }
