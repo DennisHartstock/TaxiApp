@@ -60,11 +60,11 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
     private GoogleMap mMap;
     private ActivityDriverMapsBinding binding;
 
-    FirebaseAuth auth;
-    FirebaseDatabase database;
-    FirebaseUser currentUser;
+    private FirebaseAuth auth;
+    private FirebaseDatabase database;
+    private FirebaseUser currentUser;
 
-    Button settingsButton, signOutButton;
+    private Button settingsButton, signOutButton;
 
     private static final int CHECK_SETTINGS_CODE = 111;
     private static final int REQUEST_LOCATION_PERMISSION = 222;

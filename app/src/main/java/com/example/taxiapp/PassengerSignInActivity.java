@@ -24,7 +24,7 @@ public class PassengerSignInActivity extends AppCompatActivity {
     private boolean isLoginModeActive;
 
     private FirebaseAuth mAuth;
-    FirebaseDatabase database;
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
