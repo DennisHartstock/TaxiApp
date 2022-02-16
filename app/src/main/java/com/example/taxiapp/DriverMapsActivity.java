@@ -64,6 +64,8 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
     private FirebaseDatabase database;
     private FirebaseUser currentUser;
 
+    DatabaseReference driversGeoFire;
+
     private Button settingsButton, signOutButton;
 
     private static final int CHECK_SETTINGS_CODE = 111;
@@ -114,9 +116,9 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
 
     private void signOutDriver() {
         String driverId = currentUser.getUid();
-        DatabaseReference drivers = FirebaseDatabase.getInstance().getReference().child("drivers");
+        driversGeoFire = database.getReference().child("driversGeoFire");
 
-        GeoFire geoFire = new GeoFire(drivers);
+        GeoFire geoFire = new GeoFire(driversGeoFire);
         geoFire.removeLocation(driverId);
 
         Intent intent = new Intent(DriverMapsActivity.this, ChooseModeActivity.class);
@@ -235,9 +237,12 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
             mMap.addMarker(new MarkerOptions().position(driverLocation).title("Driver Location"));
 
             String driverId = currentUser.getUid();
-            DatabaseReference drivers = FirebaseDatabase.getInstance().getReference().child("drivers");
+            driversGeoFire = database.getReference().child("driversGeoFire");
 
-            GeoFire geoFire = new GeoFire(drivers);
+            DatabaseReference drivers = database.getReference().child("drivers");
+            drivers.setValue(true);
+
+            GeoFire geoFire = new GeoFire(driversGeoFire);
             geoFire.setLocation(driverId, new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()));
         }
     }
